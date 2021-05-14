@@ -62,6 +62,14 @@ public class FiducialController : MonoBehaviour
 
     public float RotationMultiplier = 1;
 
+    //Parte nueva Pau
+    private Vector3 up = Vector3.zero;
+    private Vector3 right = new Vector3(0, 90, 0);
+    private Vector3 down = new Vector3(0, 180, 0);
+    private Vector3 left = new Vector3(0, 270, 0);
+    public float rayLength = 1f;
+    //Fin 
+
     List<Vector3> places;
 
     void Awake()
@@ -107,8 +115,30 @@ public class FiducialController : MonoBehaviour
         }
     }
 
+
+
+    //funcion nueva pau
+     bool Valid()
+    {
+        Ray myRay = new Ray(transform.position + new Vector3(0, 0.25f, 0), transform.forward);
+        RaycastHit hit;
+        Debug.DrawRay(myRay.origin, myRay.direction, Color.red);
+        
+ 
+        if (Physics.Raycast(myRay, out hit, rayLength))
+        {
+            if (hit.collider.tag == "limit")
+            {
+                Debug.Log("LIMITEE!");
+                return false;
+            }
+        }
+        return true;
+    }
+    //FIN
     void Update()
     {
+        
         if (this.m_TuioManager.IsConnected
             && this.m_TuioManager.IsMarkerAlive(this.MarkerID))
         {
@@ -149,18 +179,27 @@ public class FiducialController : MonoBehaviour
                 {
                     if (Input.GetKey(KeyCode.UpArrow))
                     {
+                        transform.localEulerAngles = up;
+                        if(Valid())
                         transform.position += Vector3.forward*0.5f;
                     }
                     if (Input.GetKey(KeyCode.DownArrow))
                     {
+                        transform.localEulerAngles = down;
+                        if(Valid())
                         transform.position += Vector3.forward * -0.5f;
+                        
                     } 
                     if (Input.GetKey(KeyCode.RightArrow))
                     {
+                        transform.localEulerAngles = right;
+                        if(Valid())
                         transform.position += Vector3.right * 0.5f;
                     }
                     if (Input.GetKey(KeyCode.LeftArrow))
                     {
+                        transform.localEulerAngles = left;
+                        if(Valid())
                         transform.position += Vector3.right * -0.5f;
                     } 
                 }

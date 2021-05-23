@@ -5,12 +5,11 @@ using UnityEngine.AI;
 
 public class enemyMovement : MonoBehaviour
 {
-
     public Transform[] points;
     private int destPoint = 0;
     private NavMeshAgent agent;
-    void Start()
-    {
+
+    void Start () {
         agent = GetComponent<NavMeshAgent>();
 
         // Disabling auto-braking allows for continuous movement
@@ -19,8 +18,8 @@ public class enemyMovement : MonoBehaviour
         agent.autoBraking = false;
 
         GotoNextPoint();
-        
     }
+
 
     void GotoNextPoint() {
         // Returns if no points have been set up
@@ -35,9 +34,9 @@ public class enemyMovement : MonoBehaviour
         destPoint = (destPoint + 1) % points.Length;
     }
 
-    void Update()
-    {
-    // Choose the next destination point when the agent gets
+
+    void Update () {
+        // Choose the next destination point when the agent gets
         // close to the current one.
         if (!agent.pathPending && agent.remainingDistance < 0.5f)
             GotoNextPoint();

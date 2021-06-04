@@ -8,10 +8,12 @@ using UnityEngine.AI;
 public class enemyMovement : MonoBehaviour
 {
     public Transform[] points;
+    public Transform[] points2;
     private int destPoint = 0;
     private NavMeshAgent agent;
     private LineRenderer myLineRender;
     private float timeLine = 0;
+    private int route = -1;
 
     void Start () {
         agent = GetComponent<NavMeshAgent>();
@@ -22,15 +24,28 @@ public class enemyMovement : MonoBehaviour
         myLineRender.endWidth = 0.15f;
         myLineRender.positionCount = 0;
         }
-        GotoNextPoint();
+        route = Random.Range(1, 2);
+        if(route == 1) {
+            GotoNextPoint();
+        } else
+        {
+            GotoNextPoint2();
+        }
     }
-
 
     void GotoNextPoint() {
         if (points.Length == 0)
             return;
         agent.destination = points[destPoint].position;
         destPoint = (destPoint + 1) % points.Length;
+    }
+
+    void GotoNextPoint2()
+    {
+        if (points2.Length == 0)
+            return;
+        agent.destination = points2[destPoint].position;
+        destPoint = (destPoint + 1) % points2.Length;
     }
 
 

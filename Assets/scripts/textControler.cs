@@ -72,9 +72,9 @@ public class textControler : MonoBehaviour
         }
     }
 
-    void win(){}
+    public void win(){}
 
-    void gameOver(){
+    public void gameOver(){
         Game_Over_Text_1.enabled = true;
         Game_Over_Text_2.enabled = true;
         Counter_Text_1.enabled = false;

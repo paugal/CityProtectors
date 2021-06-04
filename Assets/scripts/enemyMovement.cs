@@ -3,42 +3,79 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+[RequireComponent(typeof(LineRenderer))]
+
 public class enemyMovement : MonoBehaviour
 {
     public Transform[] points;
     private int destPoint = 0;
     private NavMeshAgent agent;
+    private LineRenderer myLineRender;
+    private float timeLine = 0;
 
     void Start () {
         agent = GetComponent<NavMeshAgent>();
-
-        // Disabling auto-braking allows for continuous movement
-        // between points (ie, the agent doesn't slow down as it
-        // approaches a destination point).
         agent.autoBraking = false;
-
+        if(this.CompareTag("enemy")){
+        myLineRender = GetComponent<LineRenderer>();
+        myLineRender.startWidth = 0.15f;
+        myLineRender.endWidth = 0.15f;
+        myLineRender.positionCount = 0;
+        }
         GotoNextPoint();
     }
 
 
     void GotoNextPoint() {
-        // Returns if no points have been set up
         if (points.Length == 0)
             return;
-
-        // Set the agent to go to the currently selected destination.
         agent.destination = points[destPoint].position;
-
-        // Choose the next point in the array as the destination,
-        // cycling to the start if necessary.
         destPoint = (destPoint + 1) % points.Length;
     }
 
 
     void Update () {
-        // Choose the next destination point when the agent gets
-        // close to the current one.
-        if (!agent.pathPending && agent.remainingDistance < 0.5f)
+        
+        if (!agent.pathPending && agent.remainingDistance < 0.5f){
             GotoNextPoint();
+            
+            
+        }
+
+        /*
+        if(timeLine > 0){
+            timeLine =Time.deltaTime - timeLine;
+            DrawPath();
+        }else{
+            //myLineRender.positionCount = 0;
+        }
+        */
+        
+        
+         
+    }
+
+    void DrawPath(){
+        myLineRender.positionCount = agent.path.corners.Length;
+        myLineRender.SetPosition(0, transform.position);
+
+        if(agent.path.corners.Length < 2){
+            return;
+        }
+
+        for(int i=1; i < agent.path.corners.Length; i++){
+            Vector3 pointPosition = new Vector3(agent.path.corners[i].x, agent.path.corners[i].y+50, agent.path.corners[i].z);
+            myLineRender.SetPosition(i, pointPosition);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other){
+        if(other.CompareTag("Player2")){
+            if(this.CompareTag("enemy")){
+                timeLine = 5 + Time.deltaTime;
+                DrawPath();
+
+            }
+        }
     }
 }

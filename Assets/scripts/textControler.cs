@@ -5,6 +5,8 @@ using TMPro;
 
 public class textControler : MonoBehaviour
 {
+    public enemyMovement enemy_movement;
+
     //START TEXT
     public TextMeshPro Start_Text_1;
     public TextMeshPro Start_Text_2;
@@ -27,7 +29,8 @@ public class textControler : MonoBehaviour
     public TextMeshPro Counter_Text_2;
 
     private float globalTime = 0.0f;
-    public float counterTime = 20;
+    public float counterTime = 90;
+    public float winTime = 10;
     private bool timeOver = false;
 
     void Start()
@@ -49,7 +52,7 @@ public class textControler : MonoBehaviour
 
         Counter_Text_1.enabled = true;
         Counter_Text_2.enabled = true;
-        
+
     }
     
     // Update is called once per frame
@@ -72,13 +75,43 @@ public class textControler : MonoBehaviour
         }
     }
 
-    public void win(){}
+    public void win(){
+        Win_Text_1.enabled = true;
+        Win_Text_2.enabled = true;
+
+        if (winTime > 0){
+            winTime -= Time.deltaTime;
+            DisplayTime(winTime);
+        }
+        else {
+            timeOver = false;
+            globalTime = 0.0f;
+            counterTime = 90;
+            winTime = 10;
+            Start();
+            enemy_movement.Start();
+        }
+    }
 
     public void gameOver(){
         Game_Over_Text_1.enabled = true;
         Game_Over_Text_2.enabled = true;
         Counter_Text_1.enabled = false;
         Counter_Text_2.enabled = false;
+        if (winTime > 0)
+        {
+            winTime -= Time.deltaTime;
+            DisplayTime(winTime);
+        }
+        else
+        {
+            timeOver = false;
+            globalTime = 0.0f;
+            counterTime = 90;
+            winTime = 10;
+            Start();
+            enemy_movement.Start();
+        }
     }
 
     void counter(){
@@ -91,7 +124,7 @@ public class textControler : MonoBehaviour
         DisplayTime(counterTime);
     }
 
-    void DisplayTime(float timeToDisplay){
+    public void DisplayTime(float timeToDisplay){
         if(timeToDisplay < 0) timeToDisplay = 0;
 
         float minutes = Mathf.FloorToInt(timeToDisplay / 60);

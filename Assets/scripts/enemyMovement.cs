@@ -14,8 +14,12 @@ public class enemyMovement : MonoBehaviour
     private LineRenderer myLineRender;
     private float timeLine = 0;
     private int route = -1;
+    public GameObject enemy;
+    public List<Transform> enemySpawnPositions = new List<Transform>();
 
-    void Start () {
+    public void Start () {
+        destPoint = 0;
+        timeLine = 0;
         agent = GetComponent<NavMeshAgent>();
         agent.autoBraking = false;
         if(this.CompareTag("enemy")){
@@ -26,9 +30,13 @@ public class enemyMovement : MonoBehaviour
         }
         route = Random.Range(1, 2);
         if(route == 1) {
+            Vector3 pos = enemySpawnPositions[0].transform.position;
+            enemy.transform.position = pos;
             GotoNextPoint();
         } else
         {
+            Vector3 pos = enemySpawnPositions[1].transform.position;
+            enemy.transform.position = pos;
             GotoNextPoint2();
         }
     }

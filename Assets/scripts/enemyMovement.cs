@@ -80,7 +80,9 @@ public class enemyMovement : MonoBehaviour
 
     void DrawPath(){
         myLineRender.positionCount = agent.path.corners.Length;
-        myLineRender.SetPosition(0, transform.position);
+        
+        Vector3 agentPosition = new Vector3(transform.position.x, transform.position.y+50, transform.position.z);
+        myLineRender.SetPosition(0, agentPosition);
 
         if(agent.path.corners.Length < 2){
             return;

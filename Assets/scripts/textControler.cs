@@ -5,7 +5,6 @@ using TMPro;
 
 public class textControler : MonoBehaviour
 {
-    public enemyMovement enemy_movement;
 
     //START TEXT
     public TextMeshPro Start_Text_1;
@@ -28,10 +27,17 @@ public class textControler : MonoBehaviour
     public TextMeshPro Counter_Text_1;
     public TextMeshPro Counter_Text_2;
 
+    public GameObject enemy;
+    public GameObject P1_pointer;
+    public GameObject P1;
+    public GameObject P2;
+
     private float globalTime = 0.0f;
-    public float counterTime = 90;
+    public float counterTime = 120;
     public float winTime = 10;
-    private bool timeOver = false;
+
+    private bool isWin = false;
+    private bool isOver = false;
 
     void Start()
     {
@@ -61,6 +67,16 @@ public class textControler : MonoBehaviour
         globalTime += Time.deltaTime;
         startText();
         counter();
+
+        if(isWin == true){
+            winTime -= Time.deltaTime;
+            win();
+        }
+
+        if(isOver == true){
+            winTime -= Time.deltaTime;
+            gameOver();
+        }
     }
 
     void startText(){
@@ -72,24 +88,26 @@ public class textControler : MonoBehaviour
             police_1.SetActive(false);
             police_2.SetActive(false);
             auxLight.enabled = false;
+            
+        }else{
+            setStartPosition();
         }
     }
 
     public void win(){
         Win_Text_1.enabled = true;
         Win_Text_2.enabled = true;
-
-        if (winTime > 0){
-            winTime -= Time.deltaTime;
-            DisplayTime(winTime);
-        }
-        else {
-            timeOver = false;
+        Counter_Text_1.enabled = false;
+        Counter_Text_2.enabled = false;
+        isWin = true;
+        if (winTime <= 0){
             globalTime = 0.0f;
-            counterTime = 90;
+            counterTime = 120;
             winTime = 10;
+            isWin = false;
+            setStartPosition();
             Start();
-            enemy_movement.Start();
+            
         }
     }
 
@@ -98,30 +116,27 @@ public class textControler : MonoBehaviour
         Game_Over_Text_2.enabled = true;
         Counter_Text_1.enabled = false;
         Counter_Text_2.enabled = false;
-        if (winTime > 0)
+
+        if (winTime <=0)
         {
-            winTime -= Time.deltaTime;
-            DisplayTime(winTime);
-        }
-        else
-        {
-            timeOver = false;
             globalTime = 0.0f;
-            counterTime = 90;
+            counterTime = 120;
             winTime = 10;
+            isOver = false;
+            setStartPosition();
             Start();
-            enemy_movement.Start();
         }
     }
 
     void counter(){
         if(counterTime>0){
         counterTime -= Time.deltaTime;
-        }else{
-            timeOver = true;
-            gameOver();
-        }
         DisplayTime(counterTime);
+        }else{
+            gameOver();
+            isOver = true;
+        }
+        
     }
 
     public void DisplayTime(float timeToDisplay){
@@ -133,6 +148,15 @@ public class textControler : MonoBehaviour
         string counterText = minutes.ToString() +":"+ seconds.ToString();
         Counter_Text_1.SetText(counterText);
         Counter_Text_2.SetText(counterText);
+
+    }
+
+    void setStartPosition(){
+        enemy.transform.position = new Vector3(15.9f, -0.0701769f,93);
+        P2.transform.position = new Vector3(44,15.9f,55.8f);
+        P1.transform.position = new Vector3(60.6f, -0.5f,26.9f);
+        P1_pointer.transform.position = new Vector3(63.9f, 0, 26.7f);
+        counterTime = 120;
 
     }
 

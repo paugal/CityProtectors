@@ -21,9 +21,9 @@ public class controlRenderEnemy : MonoBehaviour
         float distPlayer2 = Vector3.Distance(enemy.transform.position, player2.transform.position);
         MeshRenderer render = gameObject.GetComponent<MeshRenderer>();
         if(distPlayer1 < 15 || distPlayer2 < 35){
-            render.enabled = false;
-        }else{
             render.enabled = true;
+        }else{
+            render.enabled = false;
         }
         
         

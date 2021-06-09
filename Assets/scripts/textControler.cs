@@ -31,6 +31,7 @@ public class textControler : MonoBehaviour
     public GameObject P1_pointer;
     public GameObject P1;
     public GameObject P2;
+    public GameObject P2_pointer;
 
     private float globalTime = 0.0f;
     public float counterTime = 120;
@@ -156,6 +157,7 @@ public class textControler : MonoBehaviour
         P2.transform.position = new Vector3(44,15.9f,55.8f);
         P1.transform.position = new Vector3(60.6f, -0.5f,26.9f);
         P1_pointer.transform.position = new Vector3(63.9f, 0, 26.7f);
+        P2_pointer.transform.position = new Vector3(42.7f, 0, 56f);
         counterTime = 120;
 
     }

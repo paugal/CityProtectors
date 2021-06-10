@@ -7,19 +7,22 @@ using UnityEngine.AI;
 
 public class enemyMovement : MonoBehaviour
 {
+    
     public Transform[] points;
     public Transform[] points2;
     private int destPoint = 0;
     private NavMeshAgent agent;
     private LineRenderer myLineRender;
-    private float timeLine = 0;
     private int route = -1;
     public GameObject enemy;
     public List<Transform> enemySpawnPositions = new List<Transform>();
 
+    public bool pathShown = false;
+    public float shownTime = 5f;
+    private float globalTime = 0.0f;
+
     public void Start () {
         destPoint = 0;
-        timeLine = 0;
         agent = GetComponent<NavMeshAgent>();
         agent.autoBraking = false;
         if(this.CompareTag("enemy")){
@@ -60,44 +63,47 @@ public class enemyMovement : MonoBehaviour
     void Update () {
         
         if (!agent.pathPending && agent.remainingDistance < 0.5f){
-            GotoNextPoint();
-            
-            
+            GotoNextPoint();  
         }
 
-        /*
-        if(timeLine > 0){
-            timeLine =Time.deltaTime - timeLine;
+        globalTime += Time.deltaTime;
+        if(pathShown == true){
+            shownTime -= Time.deltaTime;
             DrawPath();
-        }else{
-            //myLineRender.positionCount = 0;
         }
-        */
-        
-        
-         
     }
 
     void DrawPath(){
-        myLineRender.positionCount = agent.path.corners.Length;
+
+        if(shownTime>=0){
+            myLineRender.enabled = true;
+            myLineRender.positionCount = agent.path.corners.Length;
+            
+            Vector3 agentPosition = new Vector3(transform.position.x, transform.position.y+50, transform.position.z);
+            myLineRender.SetPosition(0, agentPosition);
+
+            if(agent.path.corners.Length < 2){
+                return;
+            }
+
+            for(int i=1; i < agent.path.corners.Length; i++){
+                Vector3 pointPosition = new Vector3(agent.path.corners[i].x, agent.path.corners[i].y+50, agent.path.corners[i].z);
+                myLineRender.SetPosition(i, pointPosition);
+                myLineRender.SetWidth(1f, 1f);
+            }
+
+        }else{
+            myLineRender.enabled = false;
+            shownTime = 5;
+            pathShown = false;
+        }
         
-        Vector3 agentPosition = new Vector3(transform.position.x, transform.position.y+50, transform.position.z);
-        myLineRender.SetPosition(0, agentPosition);
-
-        if(agent.path.corners.Length < 2){
-            return;
-        }
-
-        for(int i=1; i < agent.path.corners.Length; i++){
-            Vector3 pointPosition = new Vector3(agent.path.corners[i].x, agent.path.corners[i].y+50, agent.path.corners[i].z);
-            myLineRender.SetPosition(i, pointPosition);
-        }
     }
 
     private void OnTriggerEnter(Collider other){
         if(other.CompareTag("Player2")){
             if(this.CompareTag("enemy")){
-                timeLine = 5 + Time.deltaTime;
+                pathShown = true;
                 DrawPath();
 
             }

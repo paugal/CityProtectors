@@ -32,6 +32,7 @@ public class textControler : MonoBehaviour
     public GameObject P1;
     public GameObject P2;
     public GameObject P2_pointer;
+    
 
     private float globalTime = 0.0f;
     public float counterTime = 120;
@@ -39,6 +40,10 @@ public class textControler : MonoBehaviour
 
     private bool isWin = false;
     private bool isOver = false;
+
+    public AudioSource winSound;
+    public AudioSource gameOverSound;
+    public AudioSource titleSound;
 
     void Start()
     {
@@ -60,6 +65,10 @@ public class textControler : MonoBehaviour
         Counter_Text_1.enabled = true;
         Counter_Text_2.enabled = true;
 
+        if(!titleSound.isPlaying){
+                titleSound.Play(0);
+            }
+
     }
     
     // Update is called once per frame
@@ -71,17 +80,23 @@ public class textControler : MonoBehaviour
 
         if(isWin == true){
             winTime -= Time.deltaTime;
+            if(!winSound.isPlaying){
+                winSound.Play(0);
+            }
             win();
         }
 
         if(isOver == true){
             winTime -= Time.deltaTime;
+            if(!gameOverSound.isPlaying){
+                gameOverSound.Play(0);
+            }
             gameOver();
         }
     }
 
     void startText(){
-        if(globalTime > 10){
+        if(globalTime > 15){
             Start_Text_1.enabled = false;
             Start_Text_2.enabled = false;
             helicopter_1.SetActive(false);
@@ -89,6 +104,7 @@ public class textControler : MonoBehaviour
             police_1.SetActive(false);
             police_2.SetActive(false);
             auxLight.enabled = false;
+            titleSound.Stop();
             
         }else{
             setStartPosition();
@@ -106,6 +122,7 @@ public class textControler : MonoBehaviour
             counterTime = 120;
             winTime = 10;
             isWin = false;
+            winSound.Stop();
             setStartPosition();
             Start();
             
@@ -124,6 +141,7 @@ public class textControler : MonoBehaviour
             counterTime = 120;
             winTime = 10;
             isOver = false;
+            gameOverSound.Stop();
             setStartPosition();
             Start();
         }

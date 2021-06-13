@@ -22,15 +22,18 @@ public class enemyMovement : MonoBehaviour
     private float globalTime = 0.0f;
 
     public void Start () {
+        
         destPoint = 0;
         agent = GetComponent<NavMeshAgent>();
         agent.autoBraking = false;
-        if(this.CompareTag("enemy")){
+
+        //ENEMY's PATH
         myLineRender = GetComponent<LineRenderer>();
         myLineRender.startWidth = 0.15f;
         myLineRender.endWidth = 0.15f;
         myLineRender.positionCount = 0;
-        }
+
+
         route = Random.Range(1, 2);
         if(route == 1) {
             Vector3 pos = enemySpawnPositions[0].transform.position;
@@ -105,7 +108,6 @@ public class enemyMovement : MonoBehaviour
             if(this.CompareTag("enemy")){
                 pathShown = true;
                 DrawPath();
-
             }
         }
     }

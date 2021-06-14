@@ -11,11 +11,16 @@ public class enemyMovement : MonoBehaviour
     public Transform[] points;
     public Transform[] points2;
     private int destPoint = 0;
+    private int destPoint2 = 0;
+
     private NavMeshAgent agent;
     private LineRenderer myLineRender;
-    private int route = -1;
+
     public GameObject enemy;
-    public List<Transform> enemySpawnPositions = new List<Transform>();
+
+    public GameObject textController;
+    private textControler cs;
+    private int level;
 
     public bool pathShown = false;
     public float shownTime = 5f;
@@ -23,7 +28,11 @@ public class enemyMovement : MonoBehaviour
 
     public void Start () {
         
+        cs = textController.GetComponent<textControler>();
+        level = cs.level;
+
         destPoint = 0;
+        destPoint2 = 0;
         agent = GetComponent<NavMeshAgent>();
         agent.autoBraking = false;
 
@@ -33,18 +42,7 @@ public class enemyMovement : MonoBehaviour
         myLineRender.endWidth = 0.15f;
         myLineRender.positionCount = 0;
 
-
-        route = Random.Range(1, 2);
-        if(route == 1) {
-            Vector3 pos = enemySpawnPositions[0].transform.position;
-            enemy.transform.position = pos;
-            GotoNextPoint();
-        } else
-        {
-            Vector3 pos = enemySpawnPositions[1].transform.position;
-            enemy.transform.position = pos;
-            GotoNextPoint2();
-        }
+        GotoNextPoint();
     }
 
     void GotoNextPoint() {
@@ -56,17 +54,22 @@ public class enemyMovement : MonoBehaviour
 
     void GotoNextPoint2()
     {
-        if (points2.Length == 0)
-            return;
-        agent.destination = points2[destPoint].position;
-        destPoint = (destPoint + 1) % points2.Length;
+        if (points2.Length == 0) return;
+        agent.destination = points2[destPoint2].position;
+        destPoint2 = (destPoint2 + 1) % points2.Length;
     }
 
 
     void Update () {
         
+        level = cs.level;
+
         if (!agent.pathPending && agent.remainingDistance < 0.5f){
-            GotoNextPoint();  
+            if(level == 0){
+                GotoNextPoint();  
+            }else{
+                GotoNextPoint2(); 
+            }  
         }
 
         globalTime += Time.deltaTime;

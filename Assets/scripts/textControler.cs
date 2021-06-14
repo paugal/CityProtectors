@@ -28,6 +28,9 @@ public class textControler : MonoBehaviour
     public TextMeshPro Counter_Text_2;
 
     public GameObject enemy;
+    public GameObject eSP1;
+    public GameObject eSP2;
+
     public GameObject P1_pointer;
     public GameObject P1;
     public GameObject P2;
@@ -40,6 +43,7 @@ public class textControler : MonoBehaviour
 
     private bool isWin = false;
     private bool isOver = false;
+    public int level = 0;
 
     public AudioSource winSound;
     public AudioSource gameOverSound;
@@ -83,6 +87,7 @@ public class textControler : MonoBehaviour
             if(!winSound.isPlaying){
                 winSound.Play(0);
             }
+            if(level ==0) level = 1;
             win();
         }
 
@@ -171,7 +176,12 @@ public class textControler : MonoBehaviour
     }
 
     void setStartPosition(){
-        enemy.transform.position = new Vector3(15.9f, -0.0701769f,93);
+        if(level==0){
+            enemy.transform.position = eSP1.transform.position;
+        }else{
+            enemy.transform.position = eSP2.transform.position;
+        }
+        
         P2.transform.position = new Vector3(44,15.9f,55.8f);
         P1.transform.position = new Vector3(60.6f, -0.5f,26.9f);
         P1_pointer.transform.position = new Vector3(63.9f, 0, 26.7f);

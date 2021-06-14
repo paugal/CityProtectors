@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class helicopterController : MonoBehaviour
+public class controlHeliPointer : MonoBehaviour
 {
 
     public float rayLength = 1f;
